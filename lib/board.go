@@ -25,15 +25,15 @@ func (b *Board) String() string {
 	var rowDiv string = strings.Repeat("-", (b.Width*2)+1)
 
 	buffer.WriteString(rowDiv)
-	for i := range b.Cells {
+	for i, cell := range b.Cells {
 
 		if i%b.Width == 0 {
 			buffer.WriteString("\n")
 			buffer.WriteString("|")
 		}
 
-		if b.Cells[i].IsOccupied() {
-			buffer.WriteString(b.Cells[i].String())
+		if cell.IsOccupied() {
+			buffer.WriteString(cell.String())
 		} else {
 			buffer.WriteString(" ")
 		}
@@ -127,8 +127,8 @@ func (b *Board) hasVerticalWin(piece string) bool {
 
 // Checks whether the board is completely occupied (a tie)
 func (b *Board) isFull() bool {
-	for i := range b.Cells {
-		if !b.Cells[i].IsOccupied() {
+	for _, cell := range b.Cells {
+		if !cell.IsOccupied() {
 			return false
 		}
 	}
