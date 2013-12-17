@@ -6,24 +6,29 @@ import (
 	"strings"
 )
 
-const (
-	BOARD_WIDTH     = 9
-	BOARD_HEIGHT    = 9
-	NUMBER_OF_CELLS = BOARD_WIDTH * BOARD_HEIGHT
-	MATCHES_TO_WIN  = 5
-)
-
 func main() {
 	fmt.Println("Hello, welcome to tic-tac-toe!")
 	var input int
 	var board *Board
+	var width, height, matches_to_win, number_of_cells int
 
-	for board = NewBoard(); board.IsGameOver() != true; {
+	fmt.Printf("Enter the width of the board: ")
+	fmt.Scanf("%d", &width)
+
+	fmt.Printf("Enter the height of the board: ")
+	fmt.Scanf("%d", &height)
+
+	fmt.Printf("Finally, enter the number of matches required to win: ")
+	fmt.Scanf("%d", &matches_to_win)
+
+	number_of_cells = width * height
+
+	for board = NewBoard(height, width, matches_to_win); board.IsGameOver() != true; {
 		fmt.Println()
 		fmt.Println(board)
-		fmt.Printf("Enter your move (1-%d)", NUMBER_OF_CELLS)
+		fmt.Printf("Enter your move (1-%d)", number_of_cells)
 		fmt.Scanf("%d", &input)
-		if input > NUMBER_OF_CELLS || input < 1 {
+		if input > number_of_cells || input < 1 {
 			fmt.Println("Out of bounds! Try again")
 			continue
 		}
@@ -47,20 +52,21 @@ type Cell struct {
 }
 
 type Board struct {
-	Cells  [NUMBER_OF_CELLS]*Cell
-	Width  int
-	Height int
-	Winner string
+	Cells        []*Cell
+	Width        int
+	Height       int
+	MatchesToWin int
+	Winner       string
 }
 
 func (b *Board) String() string {
 	var buffer bytes.Buffer
-	var rowDiv string = strings.Repeat("-", (BOARD_WIDTH*2)+1)
+	var rowDiv string = strings.Repeat("-", (b.Width*2)+1)
 
 	buffer.WriteString(rowDiv)
 	for i := range b.Cells {
 
-		if i%BOARD_WIDTH == 0 {
+		if i%b.Width == 0 {
 			buffer.WriteString("\n")
 			buffer.WriteString("|")
 		}
@@ -91,13 +97,16 @@ func (c Cell) IsOccupied() bool {
 	return len(c.Value) != 0
 }
 
-func NewBoard() *Board {
+func NewBoard(height, width, matches_to_win int) *Board {
 	board := new(Board)
+	board.Cells = make([]*Cell, height*width)
 	for i := range board.Cells {
 		board.Cells[i] = new(Cell)
 	}
-	board.Height = BOARD_HEIGHT
-	board.Width = BOARD_WIDTH
+	board.Height = height
+	board.Width = width
+	board.MatchesToWin = matches_to_win
+
 	return board
 }
 
@@ -117,7 +126,7 @@ func (b *Board) IsGameOver() bool {
 				matches = 0
 			}
 
-			if matches >= MATCHES_TO_WIN {
+			if matches >= b.MatchesToWin {
 				b.Winner = piece
 				return true
 			}
@@ -135,7 +144,7 @@ func (b *Board) IsGameOver() bool {
 				matches = 0
 			}
 
-			if matches >= MATCHES_TO_WIN {
+			if matches >= b.MatchesToWin {
 				b.Winner = piece
 				return true
 			}
