@@ -18,3 +18,7 @@ func (c Cell) IsOccupied() bool {
 func (c Cell) String() string {
 	return c.Value
 }
+
+func (c *Cell) SetValue(val string) {
+	c.Value = val
+}
