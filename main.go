@@ -6,27 +6,16 @@ import (
 )
 
 func main() {
-	fmt.Println("Hello, welcome to tic-tac-toe!")
-	var input int
+	printHeader()
 	var board *lib.Board
-	var width, height, matches_to_win, number_of_cells int
+	width, height, matches_to_win := getBoardSize()
 
-	fmt.Printf("Enter the width of the board: ")
-	fmt.Scanf("%d", &width)
-
-	fmt.Printf("Enter the height of the board: ")
-	fmt.Scanf("%d", &height)
-
-	fmt.Printf("Finally, enter the number of matches required to win: ")
-	fmt.Scanf("%d", &matches_to_win)
-
-	number_of_cells = width * height
+	number_of_cells := width * height
 
 	for board = lib.NewBoard(height, width, matches_to_win); board.IsGameOver() != true; {
 		fmt.Println()
 		fmt.Println(board)
-		fmt.Printf("Enter your move (1-%d)", number_of_cells)
-		fmt.Scanf("%d", &input)
+		input := getNextMove(number_of_cells)
 		if input > number_of_cells || input < 1 {
 			fmt.Println("Out of bounds! Try again")
 			continue
@@ -36,12 +25,39 @@ func main() {
 		board.PlacePiece("X", input-1)
 	}
 
-	if len(board.Winner) != 0 {
-		fmt.Printf("\n%s won the game!", board.Winner)
+	printResults(board)
+}
+
+func printResults(b *lib.Board) {
+	if len(b.Winner) != 0 {
+		fmt.Printf("\n%s won the game!", b.Winner)
 	} else {
 		fmt.Println("It was a tie")
 	}
 
 	fmt.Println()
-	fmt.Println(board)
+	fmt.Println(b)
+}
+
+func getBoardSize() (width, height, matches_to_win int) {
+	fmt.Printf("Enter the width of the board: ")
+	fmt.Scanf("%d", &width)
+
+	fmt.Printf("Enter the height of the board: ")
+	fmt.Scanf("%d", &height)
+
+	fmt.Printf("Finally, enter the number of matches required to win: ")
+	fmt.Scanf("%d", &matches_to_win)
+
+	return width, height, matches_to_win
+}
+
+func printHeader() {
+	fmt.Println("Hello, welcome to tic-tac-toe!")
+}
+
+func getNextMove(number_of_cells int) (input int) {
+	fmt.Printf("Enter your move (1-%d)", number_of_cells)
+	fmt.Scanf("%d", &input)
+	return input
 }
