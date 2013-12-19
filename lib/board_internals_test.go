@@ -181,4 +181,13 @@ var _ = Describe("win conditions", func() {
 			Expect(b.hasDiagonalWin(piece)).To(Equal(true), "%s", b)
 		})
 	})
+
+	It("should know when a board is empty and full", func() {
+		b := NewBoard(3, 3, 3)
+		Expect(b.isFull()).To(Equal(false), "%s", b)
+		for i := 0; i < b.Height*b.Width; i += 1 {
+			b.PlacePiece("X", i)
+		}
+		Expect(b.isFull()).To(Equal(true), "%s", b)
+	})
 })
