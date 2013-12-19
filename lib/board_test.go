@@ -26,4 +26,55 @@ var _ = Describe("Board", func() {
 
 		Expect(b.String()).To(Equal(str))
 	})
+
+	It("should know when the game is a tie", func() {
+		b := lib.NewBoard(3, 3, 3)
+		Expect(b.IsGameOver()).To(Equal(false))
+
+		for i := 0; i < 9; i += 1 {
+			b.PlacePiece("X", i)
+		}
+
+		Expect(b.IsGameOver()).To(Equal(true))
+	})
+
+	It("should know when someone has won horizontally", func() {
+		b := lib.NewBoard(3, 3, 3)
+
+		for i := 0; i < 3; i += 1 {
+			b.PlacePiece("X", i)
+		}
+
+		Expect(b.IsGameOver()).To(Equal(true))
+	})
+
+	It("should know when someone has won vertically", func() {
+		b := lib.NewBoard(3, 3, 3)
+
+		for i := 0; i < 3; i += 1 {
+			b.PlacePiece("X", i*3)
+		}
+
+		Expect(b.IsGameOver()).To(Equal(true))
+	})
+
+	It("should know when someone has won NW to SE diagonally", func() {
+		b := lib.NewBoard(3, 3, 3)
+
+		for _, i := range [3]int{0, 4, 8} {
+			b.PlacePiece("X", i)
+		}
+
+		Expect(b.IsGameOver()).To(Equal(true), "%s", b)
+	})
+
+	It("should know when someone has won NE to SW diagonally", func() {
+		b := lib.NewBoard(3, 3, 3)
+
+		for _, i := range [3]int{2, 4, 6} {
+			b.PlacePiece("X", i)
+		}
+
+		Expect(b.IsGameOver()).To(Equal(true), "%s", b)
+	})
 })

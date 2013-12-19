@@ -70,7 +70,7 @@ func (b *Board) IsGameOver() bool {
 	piece := "X"
 
 	// We don't support diagonals
-	if b.hasHorizontalWin(piece) || b.hasVerticalWin(piece) {
+	if b.hasHorizontalWin(piece) || b.hasVerticalWin(piece) || b.hasDiagonalWin(piece) {
 		b.Winner = piece
 		return true
 	}
@@ -123,6 +123,113 @@ func (b *Board) hasVerticalWin(piece string) bool {
 	}
 
 	return false
+}
+
+// Checks the board for a diagonal win condition for the provided piece
+func (b *Board) hasDiagonalWin(piece string) bool {
+	for i := 0; i < (b.Width * b.Height); i += 1 {
+		if b.Cells[i].IsOccupiedBy(piece) != true {
+			continue
+		}
+
+		if b.getNumMatchesTopLeft(i, piece)+b.getNumMatchesBottomRight(i, piece)+1 >= b.MatchesToWin {
+			return true
+		}
+
+		if b.getNumMatchesTopRight(i, piece)+b.getNumMatchesBottomLeft(i, piece)+1 >= b.MatchesToWin {
+			return true
+		}
+	}
+
+	return false
+}
+
+func (b *Board) getNumMatchesBottomLeft(cell int, piece string) int {
+	index := cell
+	matches := 0
+
+	// While the cell we're checking is not on the top row or left col
+	for !(b.isCellOnBottomRow(index) || b.isCellOnLeftCol(index)) {
+		index = index + b.Width - 1
+
+		if b.Cells[index].IsOccupiedBy(piece) {
+			matches += 1
+		} else {
+			break
+		}
+	}
+
+	return matches
+}
+
+func (b *Board) getNumMatchesTopLeft(cell int, piece string) int {
+	index := cell
+	matches := 0
+
+	// While the cell we're checking is not on the top row or left col
+	for !(b.isCellOnTopRow(index) || b.isCellOnLeftCol(index)) {
+		index = index - b.Width - 1
+
+		if b.Cells[index].IsOccupiedBy(piece) {
+			matches += 1
+		} else {
+			break
+		}
+	}
+
+	return matches
+}
+
+func (b *Board) getNumMatchesTopRight(cell int, piece string) int {
+	index := cell
+	matches := 0
+
+	// While the cell we're checking is not on the top row or left col
+	for !(b.isCellOnTopRow(index) || b.isCellOnRightCol(index)) {
+		index = index - b.Width + 1
+
+		if b.Cells[index].IsOccupiedBy(piece) {
+			matches += 1
+		} else {
+			break
+		}
+	}
+
+	return matches
+}
+
+func (b *Board) getNumMatchesBottomRight(cell int, piece string) int {
+	index := cell
+	matches := 0
+
+	// While the cell we're checking is not on the top row or left col
+	for !(b.isCellOnBottomRow(index) || b.isCellOnRightCol(index)) {
+		index = index + b.Width + 1
+
+		if b.Cells[index].IsOccupiedBy(piece) {
+			matches += 1
+		} else {
+			break
+		}
+	}
+
+	return matches
+}
+
+func (b *Board) isCellOnTopRow(cell int) bool {
+	return cell < b.Width
+}
+
+func (b *Board) isCellOnBottomRow(cell int) bool {
+	return (cell >= (b.Height-1)*b.Width)
+}
+
+func (b *Board) isCellOnRightCol(cell int) bool {
+	return cell%b.Width == (b.Width - 1)
+}
+
+func (b *Board) isCellOnLeftCol(cell int) bool {
+	return cell%b.Width == 0
 }
 
 // Checks whether the board is completely occupied (a tie)
