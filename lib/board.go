@@ -144,6 +144,7 @@ func (b *Board) hasDiagonalWin(piece string) bool {
 	return false
 }
 
+// Gets the number of matches in the bottom left direction
 func (b *Board) getNumMatchesBottomLeft(cell int, piece string) int {
 	index := cell
 	matches := 0
@@ -162,6 +163,7 @@ func (b *Board) getNumMatchesBottomLeft(cell int, piece string) int {
 	return matches
 }
 
+// Gets the number of matches in the top left direction
 func (b *Board) getNumMatchesTopLeft(cell int, piece string) int {
 	index := cell
 	matches := 0
@@ -180,6 +182,7 @@ func (b *Board) getNumMatchesTopLeft(cell int, piece string) int {
 	return matches
 }
 
+// Gets the number of matches in the top right direction
 func (b *Board) getNumMatchesTopRight(cell int, piece string) int {
 	index := cell
 	matches := 0
@@ -198,6 +201,7 @@ func (b *Board) getNumMatchesTopRight(cell int, piece string) int {
 	return matches
 }
 
+// Gets the number of matches in the bottom right direction
 func (b *Board) getNumMatchesBottomRight(cell int, piece string) int {
 	index := cell
 	matches := 0
@@ -216,18 +220,22 @@ func (b *Board) getNumMatchesBottomRight(cell int, piece string) int {
 	return matches
 }
 
+// Checks whether the cell is on the top border of the board
 func (b *Board) isCellOnTopRow(cell int) bool {
 	return cell < b.Width
 }
 
+// Checks whether the cell is on the bottom border of the board
 func (b *Board) isCellOnBottomRow(cell int) bool {
 	return (cell >= (b.Height-1)*b.Width)
 }
 
+// Checks whether the cell is on the right border of the board
 func (b *Board) isCellOnRightCol(cell int) bool {
 	return cell%b.Width == (b.Width - 1)
 }
 
+// Checks whether the cell is on the left border of the board
 func (b *Board) isCellOnLeftCol(cell int) bool {
 	return cell%b.Width == 0
 }
