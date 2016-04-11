@@ -1,3 +1,5 @@
+This project is deprecated and unmaintained. Proceed with caution!
+
 Tic Tac Toe [![Build Status][build status]][build link]
 =======================================================
 This is a very simple tic-tac-toe game. It takes user input from stdin on a
